@@ -1,0 +1,3 @@
+examples/**
+!examples/example.pdf
+!examples/seperator_page.pdf
