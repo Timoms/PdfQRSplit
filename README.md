@@ -6,45 +6,46 @@ While named "*QR*" this tool will also work with most other barcode types.
 
 ## Installation and requirements
 
-Python 3 or newer is required. You also need **zxing** (Barcode recognition), **pypdf4** (PDF handling) and **pillow** (image handling) - all of them can be installed using pip:
+Python 3 or newer is required. 
+Default library os used for file deletion.  
+You also need **zxing** (Barcode recognition), **pypdf4** (PDF handling) and **pillow** (image handling) - all of them can be installed using pip:
 
 ```
-pip install zxing pypdf4 pillow
+pip install zxing pypdf4 pillow os
 ```
 
 ## Usage
-```
-usage: PdfQRSplit.py [-h] [-p PREFIX] [-s SEPARATOR] [-k] [--keep-page-next] [-b BRIGHTNESS] [-v] [-d] inputfile
 
-Split PDF-file into separate files based on a separator barcode
 
-positional arguments:
-  inputfile             Filename or glob to process
+| Argument | Description | Default | Example |
+|---|---|---|---|
+| -h, --help | Show help message and exit | - | - |
+| -p, --prefix <prefix\> | Prefix for generated PDF files | split | "splitted_pdf_" |
+| -o, --output <path\> | Output path for generated files | . / | "/home/user/split/" |
+| -s, --seperator <seperator\> | Barcode content used to find separator pages | ADAR-NEXTDOC | "DMS_SEPERATOR" |
+| -rm, --remove-original <True/False\> | Remove original file after splitting | False | - |
+| -k, --keep-page | Keep separator page in previous document | no | - |
+| -kn, --keep-page-next | Keep separator page in next document | no | - |
+| -b, --brightness <brightness\> | Brightness threshold for barcode preparation (0-255) | 128 | - |
+| -v, --verbose | Show verbose processing messages | off | - |
+| -d, --debug | Show debug messages | off | - |
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PREFIX, --prefix PREFIX
-                        Prefix for generated PDF files. Default: split
-  -s SEPARATOR, --separator SEPARATOR
-                        Barcode content used to find separator pages. Default: ADAR-NEXTDOC
-  -k, --keep-page       Keep separator page in previous document
-  --keep-page-next      Keep separator page in next document
-  -b BRIGHTNESS, --brightness BRIGHTNESS
-                        brightness threshold for barcode preparation (0-255). Default: 128
-  -v, --verbose         Show verbose processing messages
-  -d, --debug           Show debug messages
+```properties
+PdfQRSplit.py [-h] [-p PREFIX] [-o OUTPUT] [-s SEPARATOR] [-rm REMOVE_ORIGINAL] [-k] [--keep-page-next] [-b BRIGHTNESS] [-v] [-d] inputfile
 ```
 
-### Example
+## Example
 
 Take the file **input.pdf**, search all pages for barcodes containing the text *"SPLITME"*. If found (or at the end of the input file) previously encountered pages will be written to a separate file, in this case (-k) including the page containing the separator barcode. Since no prefix was given the first file will be named "*split_0_0.pdf*". *split* is the default prefix, 0 indicates it was generated from the first (and in this case only) input file and the second 0 indicates it's the first document extracted from this file.
 
-```python .\test.py .\input.pdf -s "SPLITME" -k -v```
+You can use the PDF provided in the `examples` directory of this repo for a quick demonstration:
 
-```
-Processing file .\input.pdf containing 66 pages
+```console
+foo@bar:~$ python .\PdfQRSplit.py .\examples\example.pdf -s "DMS_SEPERATOR" -v
+Processing file .\examples\example.pdf containing 3 pages
   Analyzing page 1
   Analyzing page 2
+  Analyzing page 3
   [...]
   Analyzing page 6
     Found separator - writing 6 pages to split_0_0.pdf
